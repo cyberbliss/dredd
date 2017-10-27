@@ -1,5 +1,5 @@
 # Source code (distributed code lives in /lib)
-/src
+#/src <- need this direcory in order to build when installing from a git repo
 
 # Common for .gitignore and .npmignore
 src-cov/
