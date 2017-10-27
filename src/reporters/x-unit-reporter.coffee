@@ -45,10 +45,7 @@ class XUnitReporter extends EventEmitter
     emitter.on 'test pass', (test) =>
       attrs =
         name: htmlencode.htmlEncode test.title
-	  if(isNaN(test.duration))
-      	attrs.time = 0
-      else
-      	attrs.time = test.duration / 1000
+        time: test.duration / 1000
       if @details
         deets = """
         \nRequest:
