@@ -45,7 +45,10 @@ class XUnitReporter extends EventEmitter
     emitter.on 'test pass', (test) =>
       attrs =
         name: htmlencode.htmlEncode test.title
-        time: test.duration / 1000
+	  if(isNaN(test.duration))
+      	attrs.time = 0
+      else
+      	attrs.time = test.duration / 1000
       if @details
         deets = """
         \nRequest:
@@ -62,13 +65,19 @@ class XUnitReporter extends EventEmitter
     emitter.on 'test skip', (test) =>
       attrs =
         name: htmlencode.htmlEncode test.title
-        time: test.duration / 1000
+      if(isNaN(test.duration))
+      	attrs.time = 0
+      else
+      	attrs.time = test.duration / 1000
       appendLine @path, toTag('testcase', attrs, false, toTag('skipped', null, true))
 
     emitter.on 'test fail', (test) =>
       attrs =
         name: htmlencode.htmlEncode test.title
-        time: test.duration / 1000
+      if(isNaN(test.duration))
+      	attrs.time = 0
+      else
+      	attrs.time = test.duration / 1000
       diff = """
       Message:
       #{test.message}
@@ -105,7 +114,7 @@ class XUnitReporter extends EventEmitter
             time: stats.duration / 1000
           }, false
           xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>'
-          fs.writeFile path, xmlHeader + '\n' + newStats + '\n' + restOfFile + '</testsuite>', (err) ->
+          fs.writeFile path, xmlHeader + '\n<testsuites>\n' + newStats + '\n' + restOfFile + '</testsuite></testsuites>', (err) ->
             logger.error err if err
             callback()
         else
